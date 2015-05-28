@@ -1,0 +1,2223 @@
+\documentclass[11pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[a4paper,margin={1in}]{geometry}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{pifont}
+\usepackage{textcomp}
+\usepackage{caption}
+\usepackage{pgfplots}
+\definecolor{sblue}{rgb}{0, 0, 1}
+\definecolor{blue}{rgb}{0, 0.55, 1}
+\definecolor{red}{rgb}{1, 0, 0}
+\newcommand{\quotes}[1]{``#1''}
+
+\begin{document}
+
+\section{Sobre este documento}
+\indent\indent Neste relatório, o leitor encontrará informações e resultados acerca dos testes realizados com o programa desenvolvido para calcular o cosseno.
+
+\section{Configuração da máquina}
+Processor: Intel\textregistered Core\texttrademark i5-3450 CPU @ 3.10GHz $\times$ 4 \\
+HD Seagate 7200RPM 1TB \\
+OS: Ubuntu 12.04 LTS\\
+OS type: 32-bit
+
+\section{Testes: informações}
+
+A seguir, testamos o desempenho do programa para os seguintes valores de precisão \textbf{\textcolor{blue}{p}} e os seguintes valores de \textbf{\textcolor{blue}{x}} em ambos os modos \textbf{\textcolor{blue}{f}} e \textbf{\textcolor{blue}{m}} tanto para a execução seqüencial quanto a execução paralela:
+\begin{itemize}
+	\item \textbf{\textcolor{blue}{p}}:
+	\begin{itemize}
+		\item 100
+		\item 1000
+		\item 3500
+		\item 15000
+	\end{itemize}
+	\item \textbf{\textcolor{blue}{x}}:
+	\begin{itemize}
+		\item $\frac{\pi}{2} \approx 1.570796326794896619231321691639751442$
+		\item $\pi \approx 3.141592653589793238462643383279502884$
+		\item $\frac{3\pi}{2} \approx 4.712388980384689857693965074919254326$
+		\item $2\pi \approx 6.283185307179586476925286766559005768$
+	\end{itemize}
+\end{itemize}
+
+\noindent Para cada valor de \textbf{\textcolor{blue}{p}}, \textbf{cada valor} de \textbf{\textcolor{blue}{x}} foi rodado um \textbf{total de 18 vezes}. \\
+\noindent Os testes foram feitos usando sucessivas chamadas
+
+\color{orange}
+\begin{verbatim}
+    $time
+\end{verbatim}
+\color{black}
+
+\noindent Como estamos interessados apenas no tempo decorrido para finalizar a execução, os dados aqui colocados são apenas referentes a saída \textbf{real} de \color{orange} time\color{black}.
+\\
+
+\noindent\textbf{Obs:} Os tempos do modo paralelo foram obtidos usando a opção \textbf{\textcolor{blue}{d}}.
+\pagebreak
+
+\section{Testes: resultados}
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 1}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.226s \\ \hline
+				2 & 0.234s \\ \hline
+				3 & 0.251s \\ \hline
+				4 & 0.233s \\ \hline
+				5 & 0.254s \\ \hline
+				6 & 0.167s \\ \hline
+				7 & 0.262s \\ \hline
+				8 & 0.243s \\ \hline
+				9 & 0.237s \\ \hline
+				10 & 0.263s \\ \hline
+				11 & 0.243s \\ \hline
+				12 & 0.221s \\ \hline
+				13 & 0.251s \\ \hline
+				14 & 0.265s \\ \hline
+				15 & 0.208s \\ \hline
+				16 & 0.270s \\ \hline
+				17 & 0.282s \\ \hline
+				18 & 0.202s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 2}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.210s \\ \hline
+				2 & 0.116s \\ \hline
+				3 & 0.136s \\ \hline
+				4 & 0.276s \\ \hline
+				5 & 0.207s \\ \hline
+				6 & 0.247s \\ \hline
+				7 & 0.195s \\ \hline
+				8 & 0.190s \\ \hline
+				9 & 0.202s \\ \hline
+				10 & 0.207s \\ \hline
+				11 & 0.252s \\ \hline
+				12 & 0.191s \\ \hline
+				13 & 0.235s \\ \hline
+				14 & 0.241s \\ \hline
+				15 & 0.199s \\ \hline
+				16 & 0.233s \\ \hline
+				17 & 0.207s \\ \hline
+				18 & 0.228s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 3}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.003s \\ \hline
+				2 & 0.003s \\ \hline
+				3 & 0.003s \\ \hline
+				4 & 0.003s \\ \hline
+				5 & 0.003s \\ \hline
+				6 & 0.003s \\ \hline
+				7 & 0.003s \\ \hline
+				8 & 0.003s \\ \hline
+				9 & 0.003s \\ \hline
+				10 & 0.003s \\ \hline
+				11 & 0.003s \\ \hline
+				12 & 0.003s \\ \hline
+				13 & 0.003s \\ \hline
+				14 & 0.003s \\ \hline
+				15 & 0.002s \\ \hline
+				16 & 0.003s \\ \hline
+				17 & 0.003s \\ \hline
+				18 & 0.002s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 4}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.002s \\ \hline
+				2 & 0.003s \\ \hline
+				3 & 0.003s \\ \hline
+				4 & 0.003s \\ \hline
+				5 & 0.003s \\ \hline
+				6 & 0.003s \\ \hline
+				7 & 0.003s \\ \hline
+				8 & 0.003s \\ \hline
+				9 & 0.003s \\ \hline
+				10 & 0.003s \\ \hline
+				11 & 0.003s \\ \hline
+				12 & 0.002s \\ \hline
+				13 & 0.003s \\ \hline
+				14 & 0.003s \\ \hline
+				15 & 0.003s \\ \hline
+				16 & 0.003s \\ \hline
+				17 & 0.003s \\ \hline
+				18 & 0.001s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 5}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.276s \\ \hline
+				2 & 0.321s \\ \hline
+				3 & 0.289s \\ \hline
+				4 & 0.301s \\ \hline
+				5 & 0.300s \\ \hline
+				6 & 0.267s \\ \hline
+				7 & 0.282s \\ \hline
+				8 & 0.253s \\ \hline
+				9 & 0.339s \\ \hline
+				10 & 0.264s \\ \hline
+				11 & 0.267s \\ \hline
+				12 & 0.290s \\ \hline
+				13 & 0.292s \\ \hline
+				14 & 0.266s \\ \hline
+				15 & 0.230s \\ \hline
+				16 & 0.191s \\ \hline
+				17 & 0.330s \\ \hline
+				18 & 0.243s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 6}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.277s \\ \hline
+				2 & 0.315s \\ \hline
+				3 & 0.361s \\ \hline
+				4 & 0.228s \\ \hline
+				5 & 0.226s \\ \hline
+				6 & 0.205s \\ \hline
+				7 & 0.281s \\ \hline
+				8 & 0.289s \\ \hline
+				9 & 0.199s \\ \hline
+				10 & 0.353s \\ \hline
+				11 & 0.392s \\ \hline
+				12 & 0.223s \\ \hline
+				13 & 0.260s \\ \hline
+				14 & 0.236s \\ \hline
+				15 & 0.266s \\ \hline
+				16 & 0.264s \\ \hline
+				17 & 0.247s \\ \hline
+				18 & 0.227s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 7}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.003s \\ \hline
+				2 & 0.003s \\ \hline
+				3 & 0.003s \\ \hline
+				4 & 0.003s \\ \hline
+				5 & 0.003s \\ \hline
+				6 & 0.003s \\ \hline
+				7 & 0.003s \\ \hline
+				8 & 0.003s \\ \hline
+				9 & 0.003s \\ \hline
+				10 & 0.003s \\ \hline
+				11 & 0.003s \\ \hline
+				12 & 0.003s \\ \hline
+				13 & 0.004s \\ \hline
+				14 & 0.004s \\ \hline
+				15 & 0.003s \\ \hline
+				16 & 0.003s \\ \hline
+				17 & 0.003s \\ \hline
+				18 & 0.003s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 8}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.003s \\ \hline
+				2 & 0.003s \\ \hline
+				3 & 0.003s \\ \hline
+				4 & 0.003s \\ \hline
+				5 & 0.003s \\ \hline
+				6 & 0.003s \\ \hline
+				7 & 0.003s \\ \hline
+				8 & 0.003s \\ \hline
+				9 & 0.003s \\ \hline
+				10 & 0.003s \\ \hline
+				11 & 0.003s \\ \hline
+				12 & 0.003s \\ \hline
+				13 & 0.002s \\ \hline
+				14 & 0.003s \\ \hline
+				15 & 0.003s \\ \hline
+				16 & 0.003s \\ \hline
+				17 & 0.003s \\ \hline
+				18 & 0.003s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 9}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.346s \\ \hline
+				2 & 0.367s \\ \hline
+				3 & 0.348s \\ \hline
+				4 & 0.353s \\ \hline
+				5 & 0.361s \\ \hline
+				6 & 0.315s \\ \hline
+				7 & 0.374s \\ \hline
+				8 & 0.365s \\ \hline
+				9 & 0.375s \\ \hline
+				10 & 0.341s \\ \hline
+				11 & 0.315s \\ \hline
+				12 & 0.273s \\ \hline
+				13 & 0.244s \\ \hline
+				14 & 0.358s \\ \hline
+				15 & 0.336s \\ \hline
+				16 & 0.324s \\ \hline
+				17 & 0.327s \\ \hline
+				18 & 0.315s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 10}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.135s \\ \hline
+				2 & 0.313s \\ \hline
+				3 & 0.277s \\ \hline
+				4 & 0.335s \\ \hline
+				5 & 0.283s \\ \hline
+				6 & 0.262s \\ \hline
+				7 & 0.252s \\ \hline
+				8 & 0.277s \\ \hline
+				9 & 0.271s \\ \hline
+				10 & 0.284s \\ \hline
+				11 & 0.367s \\ \hline
+				12 & 0.293s \\ \hline
+				13 & 0.278s \\ \hline
+				14 & 0.171s \\ \hline
+				15 & 0.302s \\ \hline
+				16 & 0.310s \\ \hline
+				17 & 0.306s \\ \hline
+				18 & 0.315s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 11}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.003s \\ \hline
+				2 & 0.003s \\ \hline
+				3 & 0.004s \\ \hline
+				4 & 0.004s \\ \hline
+				5 & 0.003s \\ \hline
+				6 & 0.004s \\ \hline
+				7 & 0.004s \\ \hline
+				8 & 0.004s \\ \hline
+				9 & 0.003s \\ \hline
+				10 & 0.004s \\ \hline
+				11 & 0.004s \\ \hline
+				12 & 0.004s \\ \hline
+				13 & 0.004s \\ \hline
+				14 & 0.003s \\ \hline
+				15 & 0.004s \\ \hline
+				16 & 0.004s \\ \hline
+				17 & 0.004s \\ \hline
+				18 & 0.004s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 12}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.004s \\ \hline
+				2 & 0.003s \\ \hline
+				3 & 0.003s \\ \hline
+				4 & 0.003s \\ \hline
+				5 & 0.003s \\ \hline
+				6 & 0.002s \\ \hline
+				7 & 0.003s \\ \hline
+				8 & 0.004s \\ \hline
+				9 & 0.004s \\ \hline
+				10 & 0.004s \\ \hline
+				11 & 0.004s \\ \hline
+				12 & 0.004s \\ \hline
+				13 & 0.004s \\ \hline
+				14 & 0.004s \\ \hline
+				15 & 0.004s \\ \hline
+				16 & 0.002s \\ \hline
+				17 & 0.004s \\ \hline
+				18 & 0.002s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 13}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.349s \\ \hline
+				2 & 0.336s \\ \hline
+				3 & 0.331s \\ \hline
+				4 & 0.420s \\ \hline
+				5 & 0.378s \\ \hline
+				6 & 0.234s \\ \hline
+				7 & 0.315s \\ \hline
+				8 & 0.379s \\ \hline
+				9 & 0.370s \\ \hline
+				10 & 0.236s \\ \hline
+				11 & 0.348s \\ \hline
+				12 & 0.347s \\ \hline
+				13 & 0.192s \\ \hline
+				14 & 0.275s \\ \hline
+				15 & 0.330s \\ \hline
+				16 & 0.359s \\ \hline
+				17 & 0.174s \\ \hline
+				18 & 0.413s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 14}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.366s \\ \hline
+				2 & 0.358s \\ \hline
+				3 & 0.298s \\ \hline
+				4 & 0.331s \\ \hline
+				5 & 0.336s \\ \hline
+				6 & 0.278s \\ \hline
+				7 & 0.345s \\ \hline
+				8 & 0.289s \\ \hline
+				9 & 0.243s \\ \hline
+				10 & 0.354s \\ \hline
+				11 & 0.287s \\ \hline
+				12 & 0.314s \\ \hline
+				13 & 0.372s \\ \hline
+				14 & 0.218s \\ \hline
+				15 & 0.328s \\ \hline
+				16 & 0.294s \\ \hline
+				17 & 0.352s \\ \hline
+				18 & 0.339s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 15}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.003s \\ \hline
+				2 & 0.004s \\ \hline
+				3 & 0.004s \\ \hline
+				4 & 0.004s \\ \hline
+				5 & 0.003s \\ \hline
+				6 & 0.003s \\ \hline
+				7 & 0.003s \\ \hline
+				8 & 0.004s \\ \hline
+				9 & 0.003s \\ \hline
+				10 & 0.004s \\ \hline
+				11 & 0.004s \\ \hline
+				12 & 0.004s \\ \hline
+				13 & 0.003s \\ \hline
+				14 & 0.004s \\ \hline
+				15 & 0.004s \\ \hline
+				16 & 0.003s \\ \hline
+				17 & 0.004s \\ \hline
+				18 & 0.003s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 16}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 100 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.004s \\ \hline
+				2 & 0.004s \\ \hline
+				3 & 0.004s \\ \hline
+				4 & 0.004s \\ \hline
+				5 & 0.004s \\ \hline
+				6 & 0.004s \\ \hline
+				7 & 0.003s \\ \hline
+				8 & 0.003s \\ \hline
+				9 & 0.003s \\ \hline
+				10 & 0.004s \\ \hline
+				11 & 0.003s \\ \hline
+				12 & 0.003s \\ \hline
+				13 & 0.004s \\ \hline
+				14 & 0.003s \\ \hline
+				15 & 0.004s \\ \hline
+				16 & 0.003s \\ \hline
+				17 & 0.004s \\ \hline
+				18 & 0.003s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+
+%
+%
+\pagebreak
+%
+%
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 17}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 1.436s \\ \hline
+				2 & 1.454s \\ \hline
+				3 & 1.467s \\ \hline
+				4 & 1.501s \\ \hline
+				5 & 1.503s \\ \hline
+				6 & 1.455s \\ \hline
+				7 & 1.395s \\ \hline
+				8 & 1.511s \\ \hline
+				9 & 1.581s \\ \hline
+				10 & 1.597s \\ \hline
+				11 & 1.352s \\ \hline
+				12 & 1.573s \\ \hline
+				13 & 1.484s \\ \hline
+				14 & 1.407s \\ \hline
+				15 & 1.480s \\ \hline
+				16 & 1.558s \\ \hline
+				17 & 1.606s \\ \hline
+				18 & 1.541s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 18}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 1.505s \\ \hline
+				2 & 1.379s \\ \hline
+				3 & 1.508s \\ \hline
+				4 & 1.519s \\ \hline
+				5 & 1.411s \\ \hline
+				6 & 1.462s \\ \hline
+				7 & 1.378s \\ \hline
+				8 & 1.316s \\ \hline
+				9 & 1.482s \\ \hline
+				10 & 1.445s \\ \hline
+				11 & 1.382s \\ \hline
+				12 & 1.327s \\ \hline
+				13 & 1.462s \\ \hline
+				14 & 1.407s \\ \hline
+				15 & 1.377s \\ \hline
+				16 & 1.498s \\ \hline
+				17 & 1.418s \\ \hline
+				18 & 1.421s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 19}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.433s \\ \hline
+				2 & 0.433s \\ \hline
+				3 & 0.431s \\ \hline
+				4 & 0.432s \\ \hline
+				5 & 0.407s \\ \hline
+				6 & 0.431s \\ \hline
+				7 & 0.433s \\ \hline
+				8 & 0.406s \\ \hline
+				9 & 0.439s \\ \hline
+				10 & 0.409s \\ \hline
+				11 & 0.431s \\ \hline
+				12 & 0.401s \\ \hline
+				13 & 0.430s \\ \hline
+				14 & 0.430s \\ \hline
+				15 & 0.408s \\ \hline
+				16 & 0.431s \\ \hline
+				17 & 0.439s \\ \hline
+				18 & 0.433s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 20}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.408s \\ \hline
+				2 & 0.407s \\ \hline
+				3 & 0.431s \\ \hline
+				4 & 0.431s \\ \hline
+				5 & 0.409s \\ \hline
+				6 & 0.407s \\ \hline
+				7 & 0.406s \\ \hline
+				8 & 0.410s \\ \hline
+				9 & 0.431s \\ \hline
+				10 & 0.431s \\ \hline
+				11 & 0.434s \\ \hline
+				12 & 0.432s \\ \hline
+				13 & 0.451s \\ \hline
+				14 & 0.431s \\ \hline
+				15 & 0.431s \\ \hline
+				16 & 0.408s \\ \hline
+				17 & 0.429s \\ \hline
+				18 & 0.432s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 21}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 1.764s \\ \hline
+				2 & 1.793s \\ \hline
+				3 & 1.679s \\ \hline
+				4 & 1.831s \\ \hline
+				5 & 1.689s \\ \hline
+				6 & 1.714s \\ \hline
+				7 & 1.688s \\ \hline
+				8 & 1.665s \\ \hline
+				9 & 1.769s \\ \hline
+				10 & 1.735s \\ \hline
+				11 & 1.601s \\ \hline
+				12 & 1.701s \\ \hline
+				13 & 1.552s \\ \hline
+				14 & 1.726s \\ \hline
+				15 & 1.746s \\ \hline
+				16 & 1.606s \\ \hline
+				17 & 1.696s \\ \hline
+				18 & 1.601s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 22}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 1.663s \\ \hline
+				2 & 1.550s \\ \hline
+				3 & 1.738s \\ \hline
+				4 & 1.541s \\ \hline
+				5 & 1.576s \\ \hline
+				6 & 1.524s \\ \hline
+				7 & 1.774s \\ \hline
+				8 & 1.618s \\ \hline
+				9 & 1.678s \\ \hline
+				10 & 1.638s \\ \hline
+				11 & 1.744s \\ \hline
+				12 & 1.668s \\ \hline
+				13 & 1.580s \\ \hline
+				14 & 1.803s \\ \hline
+				15 & 1.761s \\ \hline
+				16 & 1.629s \\ \hline
+				17 & 1.699s \\ \hline
+				18 & 1.677s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 23}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.493s \\ \hline
+				2 & 0.501s \\ \hline
+				3 & 0.471s \\ \hline
+				4 & 0.490s \\ \hline
+				5 & 0.471s \\ \hline
+				6 & 0.491s \\ \hline
+				7 & 0.492s \\ \hline
+				8 & 0.492s \\ \hline
+				9 & 0.469s \\ \hline
+				10 & 0.515s \\ \hline
+				11 & 0.471s \\ \hline
+				12 & 0.494s \\ \hline
+				13 & 0.491s \\ \hline
+				14 & 0.493s \\ \hline
+				15 & 0.491s \\ \hline
+				16 & 0.494s \\ \hline
+				17 & 0.493s \\ \hline
+				18 & 0.489s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 24}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.493s \\ \hline
+				2 & 0.471s \\ \hline
+				3 & 0.471s \\ \hline
+				4 & 0.491s \\ \hline
+				5 & 0.467s \\ \hline
+				6 & 0.470s \\ \hline
+				7 & 0.492s \\ \hline
+				8 & 0.493s \\ \hline
+				9 & 0.470s \\ \hline
+				10 & 0.497s \\ \hline
+				11 & 0.471s \\ \hline
+				12 & 0.466s \\ \hline
+				13 & 0.492s \\ \hline
+				14 & 0.490s \\ \hline
+				15 & 0.492s \\ \hline
+				16 & 0.497s \\ \hline
+				17 & 0.471s \\ \hline
+				18 & 0.471s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 25}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 1.847s \\ \hline
+				2 & 1.879s \\ \hline
+				3 & 1.728s \\ \hline
+				4 & 1.912s \\ \hline
+				5 & 1.761s \\ \hline
+				6 & 1.937s \\ \hline
+				7 & 1.883s \\ \hline
+				8 & 1.743s \\ \hline
+				9 & 1.756s \\ \hline
+				10 & 1.653s \\ \hline
+				11 & 1.681s \\ \hline
+				12 & 1.819s \\ \hline
+				13 & 1.930s \\ \hline
+				14 & 1.877s \\ \hline
+				15 & 1.717s \\ \hline
+				16 & 1.790s \\ \hline
+				17 & 1.956s \\ \hline
+				18 & 1.864s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 26}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 1.826s \\ \hline
+				2 & 1.984s \\ \hline
+				3 & 1.779s \\ \hline
+				4 & 1.809s \\ \hline
+				5 & 1.811s \\ \hline
+				6 & 1.743s \\ \hline
+				7 & 1.856s \\ \hline
+				8 & 1.871s \\ \hline
+				9 & 1.774s \\ \hline
+				10 & 1.918s \\ \hline
+				11 & 1.888s \\ \hline
+				12 & 1.908s \\ \hline
+				13 & 1.820s \\ \hline
+				14 & 1.877s \\ \hline
+				15 & 1.773s \\ \hline
+				16 & 1.784s \\ \hline
+				17 & 1.768s \\ \hline
+				18 & 1.831s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 27}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.530s \\ \hline
+				2 & 0.560s \\ \hline
+				3 & 0.527s \\ \hline
+				4 & 0.529s \\ \hline
+				5 & 0.534s \\ \hline
+				6 & 0.523s \\ \hline
+				7 & 0.528s \\ \hline
+				8 & 0.529s \\ \hline
+				9 & 0.534s \\ \hline
+				10 & 0.558s \\ \hline
+				11 & 0.535s \\ \hline
+				12 & 0.533s \\ \hline
+				13 & 0.524s \\ \hline
+				14 & 0.522s \\ \hline
+				15 & 0.524s \\ \hline
+				16 & 0.531s \\ \hline
+				17 & 0.534s \\ \hline
+				18 & 0.531s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 28}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.524s \\ \hline
+				2 & 0.530s \\ \hline
+				3 & 0.524s \\ \hline
+				4 & 0.530s \\ \hline
+				5 & 0.524s \\ \hline
+				6 & 0.554s \\ \hline
+				7 & 0.531s \\ \hline
+				8 & 0.532s \\ \hline
+				9 & 0.525s \\ \hline
+				10 & 0.560s \\ \hline
+				11 & 0.523s \\ \hline
+				12 & 0.532s \\ \hline
+				13 & 0.533s \\ \hline
+				14 & 0.530s \\ \hline
+				15 & 0.525s \\ \hline
+				16 & 0.524s \\ \hline
+				17 & 0.532s \\ \hline
+				18 & 0.531s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 29}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 1.959s \\ \hline
+				2 & 1.941s \\ \hline
+				3 & 1.845s \\ \hline
+				4 & 1.908s \\ \hline
+				5 & 2.006s \\ \hline
+				6 & 1.931s \\ \hline
+				7 & 2.070s \\ \hline
+				8 & 1.892s \\ \hline
+				9 & 1.884s \\ \hline
+				10 & 2.004s \\ \hline
+				11 & 2.027s \\ \hline
+				12 & 2.005s \\ \hline
+				13 & 1.896s \\ \hline
+				14 & 1.951s \\ \hline
+				15 & 2.071s \\ \hline
+				16 & 1.994s \\ \hline
+				17 & 2.040s \\ \hline
+				18 & 1.919s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 30}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 1.921s \\ \hline
+				2 & 2.024s \\ \hline
+				3 & 1.884s \\ \hline
+				4 & 1.859s \\ \hline
+				5 & 1.848s \\ \hline
+				6 & 1.921s \\ \hline
+				7 & 1.898s \\ \hline
+				8 & 1.840s \\ \hline
+				9 & 1.945s \\ \hline
+				10 & 1.906s \\ \hline
+				11 & 1.881s \\ \hline
+				12 & 1.769s \\ \hline
+				13 & 2.030s \\ \hline
+				14 & 1.763s \\ \hline
+				15 & 1.876s \\ \hline
+				16 & 1.730s \\ \hline
+				17 & 1.936s \\ \hline
+				18 & 1.946s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 31}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.559s \\ \hline
+				2 & 0.587s \\ \hline
+				3 & 0.561s \\ \hline
+				4 & 0.559s \\ \hline
+				5 & 0.560s \\ \hline
+				6 & 0.557s \\ \hline
+				7 & 0.554s \\ \hline
+				8 & 0.554s \\ \hline
+				9 & 0.562s \\ \hline
+				10 & 0.553s \\ \hline
+				11 & 0.552s \\ \hline
+				12 & 0.557s \\ \hline
+				13 & 0.553s \\ \hline
+				14 & 0.561s \\ \hline
+				15 & 0.561s \\ \hline
+				16 & 0.554s \\ \hline
+				17 & 0.555s \\ \hline
+				18 & 0.584s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 32}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 1000 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 0.559s \\ \hline
+				2 & 0.562s \\ \hline
+				3 & 0.559s \\ \hline
+				4 & 0.560s \\ \hline
+				5 & 0.560s \\ \hline
+				6 & 0.559s \\ \hline
+				7 & 0.585s \\ \hline
+				8 & 0.552s \\ \hline
+				9 & 0.554s \\ \hline
+				10 & 0.557s \\ \hline
+				11 & 0.589s \\ \hline
+				12 & 0.551s \\ \hline
+				13 & 0.559s \\ \hline
+				14 & 0.558s \\ \hline
+				15 & 0.553s \\ \hline
+				16 & 0.551s \\ \hline
+				17 & 0.559s \\ \hline
+				18 & 0.585s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+%-----------------------------------------------------------------------------------------------------------------------
+%
+%
+%
+%
+%
+%
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 33}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 4.539s \\ \hline
+				2 & 4.272s \\ \hline
+				3 & 4.525s \\ \hline
+				4 & 4.479s \\ \hline
+				5 & 4.423s \\ \hline
+				6 & 4.870s \\ \hline
+				7 & 4.366s \\ \hline
+				8 & 4.217s \\ \hline
+				9 & 4.514s \\ \hline
+				10 & 4.455s \\ \hline
+				11 & 4.697s \\ \hline
+				12 & 4.375s \\ \hline
+				13 & 4.423s \\ \hline
+				14 & 4.630s \\ \hline
+				15 & 4.329s \\ \hline
+				16 & 4.661s \\ \hline
+				17 & 4.551s \\ \hline
+				18 & 4.687s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 34}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 4.640s \\ \hline
+				2 & 4.085s \\ \hline
+				3 & 4.349s \\ \hline
+				4 & 4.447s \\ \hline
+				5 & 4.629s \\ \hline
+				6 & 4.596s \\ \hline
+				7 & 4.753s \\ \hline
+				8 & 4.790s \\ \hline
+				9 & 4.423s \\ \hline
+				10 & 4.527s \\ \hline
+				11 & 4.677s \\ \hline
+				12 & 4.604s \\ \hline
+				13 & 4.561s \\ \hline
+				14 & 4.654s \\ \hline
+				15 & 4.546s \\ \hline
+				16 & 4.376s \\ \hline
+				17 & 4.799s \\ \hline
+				18 & 4.459s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 35}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 4.397s \\ \hline
+				2 & 4.459s \\ \hline
+				3 & 4.423s \\ \hline
+				4 & 4.393s \\ \hline
+				5 & 4.419s \\ \hline
+				6 & 4.400s \\ \hline
+				7 & 4.456s \\ \hline
+				8 & 4.416s \\ \hline
+				9 & 4.422s \\ \hline
+				10 & 4.415s \\ \hline
+				11 & 4.434s \\ \hline
+				12 & 4.385s \\ \hline
+				13 & 4.416s \\ \hline
+				14 & 4.422s \\ \hline
+				15 & 4.436s \\ \hline
+				16 & 4.398s \\ \hline
+				17 & 4.422s \\ \hline
+				18 & 4.424s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 36}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 4.647s \\ \hline
+				2 & 4.523s \\ \hline
+				3 & 4.482s \\ \hline
+				4 & 4.486s \\ \hline
+				5 & 4.502s \\ \hline
+				6 & 4.563s \\ \hline
+				7 & 4.485s \\ \hline
+				8 & 4.491s \\ \hline
+				9 & 4.479s \\ \hline
+				10 & 4.541s \\ \hline
+				11 & 4.519s \\ \hline
+				12 & 4.487s \\ \hline
+				13 & 4.495s \\ \hline
+				14 & 4.459s \\ \hline
+				15 & 4.482s \\ \hline
+				16 & 4.489s \\ \hline
+				17 & 4.534s \\ \hline
+				18 & 4.487s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 37}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 4.839s \\ \hline
+				2 & 4.793s \\ \hline
+				3 & 5.011s \\ \hline
+				4 & 4.963s \\ \hline
+				5 & 4.581s \\ \hline
+				6 & 4.759s \\ \hline
+				7 & 4.782s \\ \hline
+				8 & 5.053s \\ \hline
+				9 & 4.864s \\ \hline
+				10 & 4.975s \\ \hline
+				11 & 4.831s \\ \hline
+				12 & 4.888s \\ \hline
+				13 & 4.804s \\ \hline
+				14 & 4.969s \\ \hline
+				15 & 5.053s \\ \hline
+				16 & 4.773s \\ \hline
+				17 & 5.060s \\ \hline
+				18 & 4.913s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 38}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 5.219s \\ \hline
+				2 & 5.146s \\ \hline
+				3 & 4.932s \\ \hline
+				4 & 4.833s \\ \hline
+				5 & 4.803s \\ \hline
+				6 & 5.018s \\ \hline
+				7 & 4.930s \\ \hline
+				8 & 4.818s \\ \hline
+				9 & 4.962s \\ \hline
+				10 & 5.010s \\ \hline
+				11 & 5.034s \\ \hline
+				12 & 4.783s \\ \hline
+				13 & 4.776s \\ \hline
+				14 & 4.891s \\ \hline
+				15 & 4.829s \\ \hline
+				16 & 5.103s \\ \hline
+				17 & 4.952s \\ \hline
+				18 & 4.740s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 39}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 4.874s \\ \hline
+				2 & 4.883s \\ \hline
+				3 & 4.976s \\ \hline
+				4 & 4.887s \\ \hline
+				5 & 4.860s \\ \hline
+				6 & 4.860s \\ \hline
+				7 & 4.847s \\ \hline
+				8 & 4.888s \\ \hline
+				9 & 4.903s \\ \hline
+				10 & 4.849s \\ \hline
+				11 & 4.915s \\ \hline
+				12 & 4.852s \\ \hline
+				13 & 4.883s \\ \hline
+				14 & 4.889s \\ \hline
+				15 & 4.817s \\ \hline
+				16 & 4.854s \\ \hline
+				17 & 4.845s \\ \hline
+				18 & 4.912s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 40}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 5.006s \\ \hline
+				2 & 5.001s \\ \hline
+				3 & 4.971s \\ \hline
+				4 & 4.972s \\ \hline
+				5 & 4.947s \\ \hline
+				6 & 5.016s \\ \hline
+				7 & 5.007s \\ \hline
+				8 & 5.003s \\ \hline
+				9 & 5.009s \\ \hline
+				10 & 5.003s \\ \hline
+				11 & 5.068s \\ \hline
+				12 & 4.940s \\ \hline
+				13 & 4.975s \\ \hline
+				14 & 5.010s \\ \hline
+				15 & 4.981s \\ \hline
+				16 & 4.973s \\ \hline
+				17 & 5.069s \\ \hline
+				18 & 5.043s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 41}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 5.484s \\ \hline
+				2 & 5.386s \\ \hline
+				3 & 5.139s \\ \hline
+				4 & 5.225s \\ \hline
+				5 & 5.150s \\ \hline
+				6 & 5.572s \\ \hline
+				7 & 5.659s \\ \hline
+				8 & 5.219s \\ \hline
+				9 & 5.506s \\ \hline
+				10 & 5.437s \\ \hline
+				11 & 5.543s \\ \hline
+				12 & 5.481s \\ \hline
+				13 & 5.219s \\ \hline
+				14 & 5.384s \\ \hline
+				15 & 5.088s \\ \hline
+				16 & 5.288s \\ \hline
+				17 & 5.261s \\ \hline
+				18 & 5.410s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 42}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 5.351s \\ \hline
+				2 & 5.080s \\ \hline
+				3 & 5.364s \\ \hline
+				4 & 5.320s \\ \hline
+				5 & 5.146s \\ \hline
+				6 & 5.385s \\ \hline
+				7 & 5.474s \\ \hline
+				8 & 5.427s \\ \hline
+				9 & 5.536s \\ \hline
+				10 & 5.274s \\ \hline
+				11 & 5.493s \\ \hline
+				12 & 4.997s \\ \hline
+				13 & 5.355s \\ \hline
+				14 & 5.459s \\ \hline
+				15 & 5.479s \\ \hline
+				16 & 5.126s \\ \hline
+				17 & 5.440s \\ \hline
+				18 & 5.242s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 43}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 5.240s \\ \hline
+				2 & 5.285s \\ \hline
+				3 & 5.258s \\ \hline
+				4 & 5.243s \\ \hline
+				5 & 5.271s \\ \hline
+				6 & 5.262s \\ \hline
+				7 & 5.264s \\ \hline
+				8 & 5.218s \\ \hline
+				9 & 5.245s \\ \hline
+				10 & 5.278s \\ \hline
+				11 & 5.316s \\ \hline
+				12 & 5.299s \\ \hline
+				13 & 5.354s \\ \hline
+				14 & 5.279s \\ \hline
+				15 & 5.244s \\ \hline
+				16 & 5.279s \\ \hline
+				17 & 5.209s \\ \hline
+				18 & 5.257s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 44}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 5.335s \\ \hline
+				2 & 5.338s \\ \hline
+				3 & 5.402s \\ \hline
+				4 & 5.350s \\ \hline
+				5 & 5.376s \\ \hline
+				6 & 5.350s \\ \hline
+				7 & 5.412s \\ \hline
+				8 & 5.438s \\ \hline
+				9 & 5.345s \\ \hline
+				10 & 5.338s \\ \hline
+				11 & 5.356s \\ \hline
+				12 & 5.343s \\ \hline
+				13 & 5.345s \\ \hline
+				14 & 5.402s \\ \hline
+				15 & 5.567s \\ \hline
+				16 & 5.668s \\ \hline
+				17 & 5.490s \\ \hline
+				18 & 5.609s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 45}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 5.731s \\ \hline
+				2 & 5.455s \\ \hline
+				3 & 5.654s \\ \hline
+				4 & 5.419s \\ \hline
+				5 & 5.712s \\ \hline
+				6 & 5.489s \\ \hline
+				7 & 5.484s \\ \hline
+				8 & 5.317s \\ \hline
+				9 & 5.453s \\ \hline
+				10 & 5.539s \\ \hline
+				11 & 5.288s \\ \hline
+				12 & 5.465s \\ \hline
+				13 & 5.532s \\ \hline
+				14 & 5.411s \\ \hline
+				15 & 5.786s \\ \hline
+				16 & 5.415s \\ \hline
+				17 & 5.547s \\ \hline
+				18 & 5.495s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 46}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 5.769s \\ \hline
+				2 & 5.322s \\ \hline
+				3 & 5.674s \\ \hline
+				4 & 5.288s \\ \hline
+				5 & 5.467s \\ \hline
+				6 & 5.669s \\ \hline
+				7 & 5.574s \\ \hline
+				8 & 5.456s \\ \hline
+				9 & 5.731s \\ \hline
+				10 & 5.565s \\ \hline
+				11 & 5.582s \\ \hline
+				12 & 5.449s \\ \hline
+				13 & 5.698s \\ \hline
+				14 & 5.423s \\ \hline
+				15 & 5.542s \\ \hline
+				16 & 5.555s \\ \hline
+				17 & 5.765s \\ \hline
+				18 & 5.587s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 47}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 5.644s \\ \hline
+				2 & 5.509s \\ \hline
+				3 & 5.458s \\ \hline
+				4 & 5.723s \\ \hline
+				5 & 5.718s \\ \hline
+				6 & 5.729s \\ \hline
+				7 & 5.571s \\ \hline
+				8 & 5.622s \\ \hline
+				9 & 5.705s \\ \hline
+				10 & 5.610s \\ \hline
+				11 & 5.659s \\ \hline
+				12 & 5.651s \\ \hline
+				13 & 5.712s \\ \hline
+				14 & 5.599s \\ \hline
+				15 & 5.692s \\ \hline
+				16 & 5.634s \\ \hline
+				17 & 5.658s \\ \hline
+				18 & 5.642s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 48}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 3500 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 5.617s \\ \hline
+				2 & 5.612s \\ \hline
+				3 & 5.629s \\ \hline
+				4 & 5.617s \\ \hline
+				5 & 5.624s \\ \hline
+				6 & 5.947s \\ \hline
+				7 & 5.617s \\ \hline
+				8 & 5.583s \\ \hline
+				9 & 5.826s \\ \hline
+				10 & 5.619s \\ \hline
+				11 & 5.723s \\ \hline
+				12 & 5.583s \\ \hline
+				13 & 5.600s \\ \hline
+				14 & 5.871s \\ \hline
+				15 & 5.768s \\ \hline
+				16 & 5.808s \\ \hline
+				17 & 5.579s \\ \hline
+				18 & 5.588s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 49}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 23.613s \\ \hline
+				2 & 23.717s \\ \hline
+				3 & 23.424s \\ \hline
+				4 & 23.393s \\ \hline
+				5 & 23.589s \\ \hline
+				6 & 23.987s \\ \hline
+				7 & 23.277s \\ \hline
+				8 & 23.518s \\ \hline
+				9 & 23.268s \\ \hline
+				10 & 23.772s \\ \hline
+				11 & 23.609s \\ \hline
+				12 & 23.829s \\ \hline
+				13 & 24.003s \\ \hline
+				14 & 23.681s \\ \hline
+				15 & 24.040s \\ \hline
+				16 & 24.064s \\ \hline
+				17 & 24.339s \\ \hline
+				18 & 23.915s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 50}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 24.326s \\ \hline
+				2 & 24.174s \\ \hline
+				3 & 24.125s \\ \hline
+				4 & 24.324s \\ \hline
+				5 & 24.836s \\ \hline
+				6 & 24.607s \\ \hline
+				7 & 24.741s \\ \hline
+				8 & 24.849s \\ \hline
+				9 & 24.943s \\ \hline
+				10 & 24.713s \\ \hline
+				11 & 25.135s \\ \hline
+				12 & 25.136s \\ \hline
+				13 & 24.482s \\ \hline
+				14 & 24.640s \\ \hline
+				15 & 24.915s \\ \hline
+				16 & 24.799s \\ \hline
+				17 & 25.170s \\ \hline
+				18 & 24.482s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 51}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 64.889s \\ \hline
+				2 & 65.010s \\ \hline
+				3 & 64.939s \\ \hline
+				4 & 64.854s \\ \hline
+				5 & 64.912s \\ \hline
+				6 & 64.871s \\ \hline
+				7 & 64.898s \\ \hline
+				8 & 64.900s \\ \hline
+				9 & 65.094s \\ \hline
+				10 & 65.033s \\ \hline
+				11 & 64.952s \\ \hline
+				12 & 65.006s \\ \hline
+				13 & 64.958s \\ \hline
+				14 & 64.950s \\ \hline
+				15 & 64.976s \\ \hline
+				16 & 64.936s \\ \hline
+				17 & 64.969s \\ \hline
+				18 & 64.994s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 52}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\frac{\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 67.000s \\ \hline
+				2 & 66.912s \\ \hline
+				3 & 66.874s \\ \hline
+				4 & 66.921s \\ \hline
+				5 & 66.789s \\ \hline
+				6 & 66.835s \\ \hline
+				7 & 66.858s \\ \hline
+				8 & 66.903s \\ \hline
+				9 & 66.886s \\ \hline
+				10 & 67.031s \\ \hline
+				11 & 66.839s \\ \hline
+				12 & 69.904s \\ \hline
+				13 & 66.877s \\ \hline
+				14 & 66.792s \\ \hline
+				15 & 66.905s \\ \hline
+				16 & 66.885s \\ \hline
+				17 & 66.794s \\ \hline
+				18 & 66.916s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 53}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 26.387s \\ \hline
+				2 & 25.769s \\ \hline
+				3 & 25.895s \\ \hline
+				4 & 25.778s \\ \hline
+				5 & 26.129s \\ \hline
+				6 & 25.902s \\ \hline
+				7 & 25.871s \\ \hline
+				8 & 25.860s \\ \hline
+				9 & 26.039s \\ \hline
+				10 & 26.819s \\ \hline
+				11 & 26.610s \\ \hline
+				12 & 26.401s \\ \hline
+				13 & 26.256s \\ \hline
+				14 & 26.558s \\ \hline
+				15 & 25.947s \\ \hline
+				16 & 25.860s \\ \hline
+				17 & 25.534s \\ \hline
+				18 & 25.699s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 54}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 26.253s \\ \hline
+				2 & 26.765s \\ \hline
+				3 & 26.066s \\ \hline
+				4 & 26.515s \\ \hline
+				5 & 26.532s \\ \hline
+				6 & 26.710s \\ \hline
+				7 & 26.332s \\ \hline
+				8 & 26.861s \\ \hline
+				9 & 27.173s \\ \hline
+				10 & 26.359s \\ \hline
+				11 & 26.819s \\ \hline
+				12 & 25.630s \\ \hline
+				13 & 26.997s \\ \hline
+				14 & 27.454s \\ \hline
+				15 & 27.213s \\ \hline
+				16 & 27.944s \\ \hline
+				17 & 27.457s \\ \hline
+				18 & 27.306s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 55}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 70.864s \\ \hline
+				2 & 70.945s \\ \hline
+				3 & 70.984s \\ \hline
+				4 & 70.999s \\ \hline
+				5 & 71.108s \\ \hline
+				6 & 70.963s \\ \hline
+				7 & 71.074s \\ \hline
+				8 & 70.880s \\ \hline
+				9 & 70.963s \\ \hline
+				10 & 71.027s \\ \hline
+				11 & 70.926s \\ \hline
+				12 & 70.916s \\ \hline
+				13 & 70.999s \\ \hline
+				14 & 71.009s \\ \hline
+				15 & 70.948s \\ \hline
+				16 & 70.872s \\ \hline
+				17 & 71.071s \\ \hline
+				18 & 70.900s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 56}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 73.206s \\ \hline
+				2 & 73.212s \\ \hline
+				3 & 73.215s \\ \hline
+				4 & 73.180s \\ \hline
+				5 & 73.288s \\ \hline
+				6 & 73.090s \\ \hline
+				7 & 73.233s \\ \hline
+				8 & 73.148s \\ \hline
+				9 & 73.222s \\ \hline
+				10 & 73.281s \\ \hline
+				11 & 73.110s \\ \hline
+				12 & 73.278s \\ \hline
+				13 & 73.308s \\ \hline
+				14 & 73.159s \\ \hline
+				15 & 73.238s \\ \hline
+				16 & 73.289s \\ \hline
+				17 & 73.256s \\ \hline
+				18 & 73.233s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 57}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 26.812s \\ \hline
+				2 & 26.518s \\ \hline
+				3 & 26.473s \\ \hline
+				4 & 26.645s \\ \hline
+				5 & 26.330s \\ \hline
+				6 & 26.530s \\ \hline
+				7 & 26.535s \\ \hline
+				8 & 27.002s \\ \hline
+				9 & 26.824s \\ \hline
+				10 & 26.549s \\ \hline
+				11 & 26.678s \\ \hline
+				12 & 27.049s \\ \hline
+				13 & 27.422s \\ \hline
+				14 & 27.021s \\ \hline
+				15 & 27.725s \\ \hline
+				16 & 27.265s \\ \hline
+				17 & 27.551s \\ \hline
+				18 & 27.277s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 58}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 27.509s \\ \hline
+				2 & 27.226s \\ \hline
+				3 & 27.306s \\ \hline
+				4 & 27.623s \\ \hline
+				5 & 27.325s \\ \hline
+				6 & 27.704s \\ \hline
+				7 & 26.850s \\ \hline
+				8 & 27.340s \\ \hline
+				9 & 27.553s \\ \hline
+				10 & 27.038s \\ \hline
+				11 & 27.518s \\ \hline
+				12 & 27.427s \\ \hline
+				13 & 27.747s \\ \hline
+				14 & 26.765s \\ \hline
+				15 & 26.949s \\ \hline
+				16 & 27.533s \\ \hline
+				17 & 27.997s \\ \hline
+				18 & 27.458s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 59}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 75.231s \\ \hline
+				2 & 75.295s \\ \hline
+				3 & 75.193s \\ \hline
+				4 & 75.159s \\ \hline
+				5 & 75.198s \\ \hline
+				6 & 75.225s \\ \hline
+				7 & 75.304s \\ \hline
+				8 & 75.170s \\ \hline
+				9 & 75.207s \\ \hline
+				10 & 75.150s \\ \hline
+				11 & 75.211s \\ \hline
+				12 & 75.196s \\ \hline
+				13 & 75.285s \\ \hline
+				14 & 75.178s \\ \hline
+				15 & 75.213s \\ \hline
+				16 & 75.121s \\ \hline
+				17 & 75.258s \\ \hline
+				18 & 75.122s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 60}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $\frac{3\pi}{2}$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 77.494s \\ \hline
+				2 & 77.390s \\ \hline
+				3 & 77.418s \\ \hline
+				4 & 77.505s \\ \hline
+				5 & 77.333s \\ \hline
+				6 & 77.405s \\ \hline
+				7 & 77.547s \\ \hline
+				8 & 77.467s \\ \hline
+				9 & 77.463s \\ \hline
+				10 & 77.420s \\ \hline
+				11 & 77.502s \\ \hline
+				12 & 77.469s \\ \hline
+				13 & 77.396s \\ \hline
+				14 & 77.502s \\ \hline
+				15 & 77.423s \\ \hline
+				16 & 77.511s \\ \hline
+				17 & 77.342s \\ \hline
+				18 & 77.491s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 61}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{f}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 27.321s \\ \hline
+				2 & 27.981s \\ \hline
+				3 & 27.405s \\ \hline
+				4 & 27.231s \\ \hline
+				5 & 27.400s \\ \hline
+				6 & 27.341s \\ \hline
+				7 & 27.392s \\ \hline
+				8 & 27.366s \\ \hline
+				9 & 27.678s \\ \hline
+				10 & 27.737s \\ \hline
+				11 & 27.444s \\ \hline
+				12 & 27.813s \\ \hline
+				13 & 27.546s \\ \hline
+				14 & 27.633s \\ \hline
+				15 & 27.641s \\ \hline
+				16 & 27.315s \\ \hline
+				17 & 27.511s \\ \hline
+				18 & 27.264s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 62}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Paralelo (modo \textbf{\textcolor{blue}{m}} com \textbf{\textcolor{blue}{q}} = 4)}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 28.560s \\ \hline
+				2 & 28.457s \\ \hline
+				3 & 28.401s \\ \hline
+				4 & 27.939s \\ \hline
+				5 & 27.968s \\ \hline
+				6 & 28.092s \\ \hline
+				7 & 28.311s \\ \hline
+				8 & 28.186s \\ \hline
+				9 & 28.141s \\ \hline
+				10 & 28.224s \\ \hline
+				11 & 28.130s \\ \hline
+				12 & 28.085s \\ \hline
+				13 & 28.221s \\ \hline
+				14 & 27.998s \\ \hline
+				15 & 28.116s \\ \hline
+				16 & 28.292s \\ \hline
+				17 & 28.122s \\ \hline
+				18 & 28.303s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 63}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{f}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 78.274s \\ \hline
+				2 & 78.245s \\ \hline
+				3 & 78.438s \\ \hline
+				4 & 78.317s \\ \hline
+				5 & 78.225s \\ \hline
+				6 & 78.326s \\ \hline
+				7 & 78.258s \\ \hline
+				8 & 78.331s \\ \hline
+				9 & 78.305s \\ \hline
+				10 & 78.255s \\ \hline
+				11 & 78.281s \\ \hline
+				12 & 78.366s \\ \hline
+				13 & 78.422s \\ \hline
+				14 & 78.415s \\ \hline
+				15 & 78.374s \\ \hline
+				16 & 78.394s \\ \hline
+				17 & 78.287s \\ \hline
+				18 & 78.360s \\ \hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.48\textwidth}
+			\begin{tabular}{| c | c |}
+			\hline
+			\multicolumn{2}{|c|}{\textbf{Tabela 64}} \\ \hline
+			\multicolumn{2}{|c|}{\textbf{Seqüencial (modo \textbf{\textcolor{blue}{m}})}} \\
+			\multicolumn{2}{|c|}{\textbf{\textcolor{blue}{p}} = 15000 e \textbf{\textcolor{blue}{x}} = $2\pi$} \\ [0.2ex]
+			\hline
+				\textbf{\# Execução} &  \textbf{Valor Obtido (real)} \\ \hline
+				1 & 80.763s \\ \hline
+				2 & 80.753s \\ \hline
+				3 & 80.708s \\ \hline
+				4 & 80.706s \\ \hline
+				5 & 80.605s \\ \hline
+				6 & 80.661s \\ \hline
+				7 & 80.658s \\ \hline
+				8 & 80.642s \\ \hline
+				9 & 80.731s \\ \hline
+				10 & 80.712s \\ \hline
+				11 & 80.688s \\ \hline
+				12 & 80.691s \\ \hline
+				13 & 80.618s \\ \hline
+				14 & 80.634s \\ \hline
+				15 & 80.663s \\ \hline
+				16 & 80.655s \\ \hline
+				17 & 80.740s \\ \hline
+				18 & 80.659s \\ \hline
+			\end{tabular}
+		\end{minipage}
+	\end{center}
+\end{table}
+
+\pagebreak
+
+As médias $\mu$ das 64 tabelas são apresentadas a seguir (para cada tabela \textit{i}, a média dos valores encontrados é apresentado como $\mu_i$):
+\begin{table}[!h]
+	\begin{center}
+		\begin{tabular}{| c | c | c | c | c |}
+		\hline
+		\multicolumn{5}{|c|}{\textbf{Média dos valores encontrados}} \\ \hline
+			Valores de entrada & modo \textbf{\textcolor{blue}{f}} Paralelo & modo \textbf{\textcolor{blue}{m}} Paralelo & modo \textbf{\textcolor{blue}{f}} Seqüencial & modo \textbf{\textcolor{blue}{m}} Seqüencial\\ \hline \hline
+			\textbf{\textcolor{blue}{p}} $= 100$ e \textbf{\textcolor{blue}{x}} $= \frac{\pi}{2}$ & $\mu_1 = 0.239556s$ & $\mu_2 = 0.209556s$ & $\mu_3 = 0.002889s$ & $\mu_4 = 0.002778s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 100$ e \textbf{\textcolor{blue}{x}} $= \pi$ & $\mu_5 = 0.277833s$ & $\mu_6 = 0.269389s$ & $\mu_7 = 0.003111s$ & $\mu_8 = 0.002944s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 100$ e \textbf{\textcolor{blue}{x}} $= \frac{3\pi}{2}$ & $\mu_9 = 0.335389s$ & $\mu_{10} = 0.279500s$ & $\mu_{11} = 0.003722s$ & $\mu_{12} = 0.003389s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 100$ e \textbf{\textcolor{blue}{x}} $= 2\pi$ & $\mu_{13} = 0.321444s$ & $\mu_{14} = 0.316778s$ & $\mu_{15} = 0.003556s$ & $\mu_{16} = 0.003556s$\\ \hline \hline
+			\textbf{\textcolor{blue}{p}} $= 1000$ e \textbf{\textcolor{blue}{x}} $= \frac{\pi}{2}$ & $\mu_{17} = 1.494500s$ & $\mu_{18} = 1.427611s$ & $\mu_{19} = 0.425389s$ & $\mu_{20} = 0.423278s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 1000$ e \textbf{\textcolor{blue}{x}} $= \pi$ & $\mu_{21} = 1.697556s$ & $\mu_{22} = 1.658944s$ & $\mu_{23} = 0.488944s$ & $\mu_{24} = 0.481389s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 1000$ e \textbf{\textcolor{blue}{x}} $= \frac{3\pi}{2}$ & $\mu_{25} = 1.818500s$ & $\mu_{26} = 1.834444s$ & $\mu_{27} = 0.532556s$ & $\mu_{28} = 0.531333s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 1000$ e \textbf{\textcolor{blue}{x}} $= 2\pi$ & $\mu_{29} = 1.963500s$ & $\mu_{30} = 1.887611s$ & $\mu_{31} = 0.560167s$ & $\mu_{32} = 0.561778s$\\ \hline \hline
+			\textbf{\textcolor{blue}{p}} $= 3500$ e \textbf{\textcolor{blue}{x}} $= \frac{\pi}{2}$ & $\mu_{33} = 4.500722s$ & $\mu_{34} = 4.550833s$ & $\mu_{35} = 4.418722s$ & $\mu_{36} = 4.508389s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 3500$ e \textbf{\textcolor{blue}{x}} $= \pi$ & $\mu_{37} = 4.883945s$ & $\mu_{38} = 4.932167s$ & $\mu_{39} = 4.877445s$ & $\mu_{40} = 4.999667s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 3500$ e \textbf{\textcolor{blue}{x}} $= \frac{3\pi}{2}$ & $\mu_{41} = 5.358390s$ & $\mu_{42} = 5.330444s$ & $\mu_{43} = 5.266722s$ & $\mu_{44} = 5.414667s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 3500$ e \textbf{\textcolor{blue}{x}} $= 2\pi$ & $\mu_{45} = 5.510667s$ & $\mu_{46} = 5.561999s$ & $\mu_{47} = 5.640889s$ & $\mu_{48} = 5.678389s$\\ \hline \hline
+			\textbf{\textcolor{blue}{p}} $= 15000$ e \textbf{\textcolor{blue}{x}} $= \frac{\pi}{2}$ & $\mu_{49} = 23.724335s$ & $\mu_{50} = 24.688722s$ & $\mu_{51} = 64.952284s$ & $\mu_{52} = 67.051161s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 15000$ e \textbf{\textcolor{blue}{x}} $= \pi$ & $\mu_{53} = 26.072998s$ & $\mu_{54} = 26.799225s$ & $\mu_{55} = 70.969340s$ & $\mu_{56} = 73.219218s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 15000$ e \textbf{\textcolor{blue}{x}} $= \frac{3\pi}{2}$ & $\mu_{57} = 26.900336s$ & $\mu_{58} = 27.381558s$ & $\mu_{59} = 75.206441s$ & $\mu_{60} = 77.448778s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 15000$ e \textbf{\textcolor{blue}{x}} $= 2\pi$ & $\mu_{61} = 27.501053s$ & $\mu_{62} = 28.197001s$ & $\mu_{63} = 78.326280s$ & $\mu_{64} = 80.682617s$\\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+Com as médias, obtemos os seguintes valores de desvio padrão $\sigma$ para cada uma das 64 tabelas:
+\begin{table}[!h]
+	\begin{center}
+		\begin{tabular}{| c | c | c | c | c |}
+		\hline
+		\multicolumn{5}{|c|}{\textbf{Desvio Padrão dos valores encontrados}} \\ \hline
+			Valores de entrada & modo \textbf{\textcolor{blue}{f}} Paralelo & modo \textbf{\textcolor{blue}{m}} Paralelo & modo \textbf{\textcolor{blue}{f}} Seqüencial & modo \textbf{\textcolor{blue}{m}} Seqüencial\\ \hline \hline
+			\textbf{\textcolor{blue}{p}} $= 100$ e \textbf{\textcolor{blue}{x}} $= \frac{\pi}{2}$ & $\sigma_1 = 0.027083s$ & $\sigma_2 = 0.037590s$ & $\sigma_3 = 0.000314s$ & $\sigma_4 = 0.000533s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 100$ e \textbf{\textcolor{blue}{x}} $= \pi$ & $\sigma_5 = 0.035018s$ & $\sigma_6 = 0.053471s$ & $\sigma_7 = 0.000314s$ & $\sigma_8 = 0.000229s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 100$ e \textbf{\textcolor{blue}{x}} $= \frac{3\pi}{2}$ & $\sigma_9 = 0.033672s$ & $\sigma_{10} = 0.052321s$ & $\sigma_{11} = 0.000448s$ & $\sigma_{12} = 0.000756s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 100$ e \textbf{\textcolor{blue}{x}} $= 2\pi$ & $\sigma_{13} = 0.069326s$ & $\sigma_{14} = 0.041518s$ & $\sigma_{15} = 0.000497s$ & $\sigma_{16} = 0.000497s$\\ \hline \hline
+			\textbf{\textcolor{blue}{p}} $= 1000$ e \textbf{\textcolor{blue}{x}} $= \frac{\pi}{2}$ & $\sigma_{17} = 0.070209s$ & $\sigma_{18} = 0.059752s$ & $\sigma_{19} = 0.012234s$ & $\sigma_{20} = 0.013127s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 1000$ e \textbf{\textcolor{blue}{x}} $= \pi$ & $\sigma_{21} = 0.071127s$ & $\sigma_{22} = 0.081784s$ & $\sigma_{23} = 0.011355s$ & $\sigma_{24} = 0.011795s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 1000$ e \textbf{\textcolor{blue}{x}} $= \frac{3\pi}{2}$ & $\sigma_{25} = 0.090297s$ & $\sigma_{26} = 0.061713s$ & $\sigma_{27} = 0.010139s$ & $\sigma_{28} = 0.009747s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 1000$ e \textbf{\textcolor{blue}{x}} $= 2\pi$ & $\sigma_{29} = 0.064856s$ & $\sigma_{30} = 0.078131s$ & $\sigma_{31} = 0.009506s$ & $\sigma_{32} = 0.011468s$\\ \hline \hline
+			\textbf{\textcolor{blue}{p}} $= 3500$ e \textbf{\textcolor{blue}{x}} $= \frac{\pi}{2}$ & $\sigma_{33} = 0.161185s$ & $\sigma_{34} = 0.171546s$ & $\sigma_{35} = 0.019295s$ & $\sigma_{36} = 0.042031s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 3500$ e \textbf{\textcolor{blue}{x}} $= \pi$ & $\sigma_{37} = 0.124031s$ & $\sigma_{38} = 0.132858s$ & $\sigma_{39} = 0.034664s$ & $\sigma_{40} = 0.034578s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 3500$ e \textbf{\textcolor{blue}{x}} $= \frac{3\pi}{2}$ & $\sigma_{41} = 0.161365s$ & $\sigma_{42} = 0.151873s$ & $\sigma_{43} = 0.033366s$ & $\sigma_{44} = 0.099427s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 3500$ e \textbf{\textcolor{blue}{x}} $= 2\pi$ & $\sigma_{45} = 0.131767s$ & $\sigma_{46} = 0.137793s$ & $\sigma_{47} = 0.071417s$ & $\sigma_{48} = 0.111776s$\\ \hline \hline
+			\textbf{\textcolor{blue}{p}} $= 15000$ e \textbf{\textcolor{blue}{x}} $= \frac{\pi}{2}$ & $\sigma_{49} = 0.287316s$ & $\sigma_{50} = 0.311930s$ & $\sigma_{51} = 0.059372s$ & $\sigma_{52} = 0.694714s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 15000$ e \textbf{\textcolor{blue}{x}} $= \pi$ & $\sigma_{53} = 0.344984s$ & $\sigma_{54} = 0.555751s$ & $\sigma_{55} = 0.069362s$ & $\sigma_{56} = 0.060532s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 15000$ e \textbf{\textcolor{blue}{x}} $= \frac{3\pi}{2}$ & $\sigma_{57} = 0.399570s$ & $\sigma_{58} = 0.313789s$ & $\sigma_{59} = 0.052476s$ & $\sigma_{60} = 0.058935s$\\ \hline
+			\textbf{\textcolor{blue}{p}} $= 15000$ e \textbf{\textcolor{blue}{x}} $= 2\pi$ & $\sigma_{61} = 0.201157s$ & $\sigma_{62} = 0.162900s$ & $\sigma_{63} = 0.063503s$ & $\sigma_{64} = 0.044842s$\\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+As tabelas com os valores das médias e dos desvios padrão estão já divididas de forma a separar as informações mais relevantes. Observe que, quanto às linhas, as tabelas estão divididas em 4 grupos diferentes, considerando os valores das entradas \textbf{\textcolor{blue}{p}} e \textbf{\textcolor{blue}{x}}. Agora, observando as colunas, perceba que estas estão dividas considerando o modo de execução do programa (\textbf{\textcolor{blue}{f}} ou \textbf{\textcolor{blue}{m}}) e se a execução foi feita em \textbf{seqüencial} ou \textbf{paralelo}. 
+\\
+\noindent A observação da tabela revela que:
+\begin{enumerate}
+	\item Conforme o valor de \textbf{\textcolor{blue}{x}} aumenta para um dado valor de \textbf{\textcolor{blue}{p}}, o tempo de execução também aumenta. A diferença é sútil para pequenos valores de \textbf{\textcolor{blue}{p}}, mas observe que para \textbf{\textcolor{blue}{p}} = 15000, a diferença do tempo de execução para \textbf{\textcolor{blue}{x}}$_1 = \frac{\pi}{2}$ e \textbf{\textcolor{blue}{x}}$_2 = 2\pi$ é de quase 4 segundos com uma execução paralela e pouco mais de 13s com uma execução seqüencial no modo \textbf{\textcolor{blue}{f}}. No modo \textbf{\textcolor{blue}{m}} temos um resultado semelhante.
+	\item Conforme o valor de \textbf{\textcolor{blue}{p}} aumenta, o tempo de execução aumenta bastante. Em particular, para a implementação deste programa, foi observado que para um valor próximo de \textbf{\textcolor{blue}{p}} = 3500, a execução paralela e a seqüencial demoram aproximadamente o mesmo tempo para calcular \textit{cos(x)}.
+	\item É notável que para valores baixos de \textbf{\textcolor{blue}{p}}, o modo seqüencial supera o paralelo, assim como para altos valores de precisão, o paralelo supera o seqüencial.
+	\item Os modos \textbf{\textcolor{blue}{m}} e \textbf{\textcolor{blue}{f}} com uma execução em paralela têm tempos de execução mais próximos que no modo seqüencial.
+	\item Para valores baixos de \textbf{\textcolor{blue}{p}}, a execução paralela possui um desvio padrão maior que a execução seqüencial. Isso muda conforme o valor de \textbf{\textcolor{blue}{p}} aumenta. Concluímos então que os valores da execução paralela são mais próximos da média que os valores da execução em seqüencial quanto maior for o valor de \textbf{\textcolor{blue}{p}}, e quanto menor for o valor \textbf{\textcolor{blue}{p}}, mais próximos da média são os valores da execução seqüencial em relação ao paralelo. 
+\end{enumerate}
+
+\pagebreak
+
+Nos gráficos a seguir, estão impressos apenas os 2 primeiros digitos decimais de cada valor médio $\mu$ encontrado, sem arredondamentos.
+
+\begin{center}
+	\begin{figure}[!h]
+		{\caption*{Gráfico formado com os $i$ valores médios $\mu_{i}$ obtidos anteriormente para \textbf{\textcolor{blue}{p}} $= 100$ ($1 \leq i \leq 16$).}}
+		\begin{tikzpicture} 
+			\begin{axis}[ ybar, enlargelimits=0.15, legend style={at={(0.5,-0.20)}, anchor=north,legend columns=-1}, 
+				ylabel={$\mu_{i}$}, xlabel={$i$}, symbolic x coords={$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$,$2\pi$}, xtick=data, nodes near coords, 
+				nodes near coords align={vertical}, x post scale=2, every node near coord/.append style={font=\tiny},bar width=15pt
+			] 
+			\addplot coordinates {($\frac{\pi}{2}$,0.239556) ($\pi$,0.277833) ($\frac{3\pi}{2}$,0.335389) ($2\pi$,0.321444)};
+			\addplot coordinates {($\frac{\pi}{2}$,0.209556) ($\pi$,0.269389) ($\frac{3\pi}{2}$,0.279500) ($2\pi$,0.316778)};
+			\addplot coordinates {($\frac{\pi}{2}$,0.00) ($\pi$,0.00) ($\frac{3\pi}{2}$,0.00) ($2\pi$,0.00)};
+			\addplot coordinates {($\frac{\pi}{2}$,0.00) ($\pi$,0.00) ($\frac{3\pi}{2}$,0.00) ($2\pi$,0.00)};
+			\legend{\textbf{\textcolor{blue}{f}} Paralelo,\textbf{\textcolor{blue}{m}} Paralelo,\textbf{\textcolor{blue}{f}} Seqüencial,\textbf{\textcolor{blue}{m}} Seqüencial}
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+\end{center}
+
+\begin{center}
+	\begin{figure}[!h]
+		{\caption*{Gráfico formado com os $i$ valores médios $\mu_{i}$ obtidos anteriormente para \textbf{\textcolor{blue}{p}} $= 1000$ ($17 \leq i \leq 32$).}}
+		\begin{tikzpicture} 
+			\begin{axis}[ ybar, enlargelimits=0.15, legend style={at={(0.5,-0.20)}, anchor=north,legend columns=-1}, 
+				ylabel={$\mu_{i}$}, xlabel={$i$}, symbolic x coords={$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$,$2\pi$}, xtick=data, nodes near coords, 
+				nodes near coords align={vertical}, x post scale=2, every node near coord/.append style={font=\tiny},bar width=15pt
+			] 
+			\addplot coordinates {($\frac{\pi}{2}$,1.494500) ($\pi$,1.697556) ($\frac{3\pi}{2}$,1.818500) ($2\pi$,1.963500)};
+			\addplot coordinates {($\frac{\pi}{2}$,1.427611) ($\pi$,1.658944) ($\frac{3\pi}{2}$,1.834444) ($2\pi$,1.887611)};
+			\addplot coordinates {($\frac{\pi}{2}$,0.425389) ($\pi$,0.488944) ($\frac{3\pi}{2}$,0.532556) ($2\pi$,0.560167)};
+			\addplot coordinates {($\frac{\pi}{2}$,0.423278) ($\pi$,0.481389) ($\frac{3\pi}{2}$,0.531333) ($2\pi$,0.561778)};
+			\legend{\textbf{\textcolor{blue}{f}} Paralelo,\textbf{\textcolor{blue}{m}} Paralelo,\textbf{\textcolor{blue}{f}} Seqüencial,\textbf{\textcolor{blue}{m}} Seqüencial}
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+\end{center}
+
+\begin{center}
+	\begin{figure}[!h]
+		{\caption*{Gráfico formado com os $i$ valores médios $\mu_{i}$ obtidos anteriormente para \textbf{\textcolor{blue}{p}} $= 3500$ ($33 \leq i \leq 48$).}}
+		\begin{tikzpicture} 
+			\begin{axis}[ ybar, enlargelimits=0.15, legend style={at={(0.5,-0.20)}, anchor=north,legend columns=-1}, 
+				ylabel={$\mu_{i}$}, xlabel={$i$}, symbolic x coords={$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$,$2\pi$}, xtick=data, nodes near coords, 
+				nodes near coords align={vertical}, x post scale=2, every node near coord/.append style={font=\tiny},bar width=15pt
+			] 
+			\addplot coordinates {($\frac{\pi}{2}$,4.500722) ($\pi$,4.883945) ($\frac{3\pi}{2}$,5.358390) ($2\pi$,5.510667)};
+			\addplot coordinates {($\frac{\pi}{2}$,4.550833) ($\pi$,4.932167) ($\frac{3\pi}{2}$,5.330444) ($2\pi$,5.561999)};
+			\addplot coordinates {($\frac{\pi}{2}$,4.418722) ($\pi$,4.877445) ($\frac{3\pi}{2}$,5.266722) ($2\pi$,5.640889)};
+			\addplot coordinates {($\frac{\pi}{2}$,4.508389) ($\pi$,4.999667) ($\frac{3\pi}{2}$,5.414667) ($2\pi$,5.678389)};
+			\legend{\textbf{\textcolor{blue}{f}} Paralelo,\textbf{\textcolor{blue}{m}} Paralelo,\textbf{\textcolor{blue}{f}} Seqüencial,\textbf{\textcolor{blue}{m}} Seqüencial}
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+\end{center}
+
+\pagebreak
+
+\begin{center}
+	\begin{figure}[!h]
+		{\caption*{Gráfico formado com os $i$ valores médios $\mu_{i}$ obtidos anteriormente para \textbf{\textcolor{blue}{p}} $= 15000$ ($49 \leq i \leq 64$).}}
+		\begin{tikzpicture} 
+			\begin{axis}[ ybar, enlargelimits=0.15, legend style={at={(0.5,-0.20)}, anchor=north,legend columns=-1}, 
+				ylabel={$\mu_{i}$}, xlabel={$i$}, symbolic x coords={$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$,$2\pi$}, xtick=data, nodes near coords, 
+				nodes near coords align={vertical}, x post scale=2, every node near coord/.append style={font=\tiny},bar width=15pt
+			] 
+			\addplot coordinates {($\frac{\pi}{2}$,23.724335) ($\pi$,26.072998) ($\frac{3\pi}{2}$,26.900336) ($2\pi$,27.501053)};
+			\addplot coordinates {($\frac{\pi}{2}$,24.688722) ($\pi$,26.799225) ($\frac{3\pi}{2}$,27.381558) ($2\pi$,28.197001)};
+			\addplot coordinates {($\frac{\pi}{2}$,64.952284) ($\pi$,70.969340) ($\frac{3\pi}{2}$,75.206441) ($2\pi$,78.326280)};
+			\addplot coordinates {($\frac{\pi}{2}$,67.051161) ($\pi$,73.219218) ($\frac{3\pi}{2}$,77.448778) ($2\pi$,80.682617)};
+			\legend{\textbf{\textcolor{blue}{f}} Paralelo,\textbf{\textcolor{blue}{m}} Paralelo,\textbf{\textcolor{blue}{f}} Seqüencial,\textbf{\textcolor{blue}{m}} Seqüencial}
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+\end{center}
+
+\section{Conclusão}
+
+A maioria dos resultados obtidos eram esperados. Foi um pouco surpreendente, porém, descobrir que o valor de \textbf{\textcolor{blue}{x}} faz uma diferença notável no tempo de execução. Ainda, não esperava que o seqüencial fosse tão superior ao paralelo para baixos valores de precisão.
+Além dos testes apresentados aqui, também foram feitas execuções com diferentes valores de \textbf{\textcolor{blue}{q}}. Apesar de não ter tabelas aqui com estes resultados, foi evidenciado que para valores de \textbf{\textcolor{blue}{q}} superiores que 1 e interiores que 4 (lembre que a máquina que testou tem 4 núcleos), os resultados do paralelo tendem a se apróximar dos resultados da execução seqüencial. Ainda, para valores de \textbf{\textcolor{blue}{q}} $> 4$ não foi evidenciada tanta diferença no desempenho. Para \textbf{\textcolor{blue}{q}} $= 10$, o tempo de execução foi, em média, cerca de 2s mais lerdo que para \textbf{\textcolor{blue}{q}} = 4. Tal resultado foi obtido com poucos testes e está sujeito a erros.
+
+\section{Comentários sobre a biblioteca GMP}
+
+A biblioteca \textbf{GMP} \textit{(= GNU Multi-Precision Library)} funciona alocando espaço dinamicamente para representar os números e realocando os espaços conforme necessário, caso seja necessário para representar algum número inteiro.
+Para representar estes números, a biblioteca basicamente cria estruturas de dados chamadas de \quotes{membro} \textit{(= limb)} e agrupa estes \quotes{membros} para representar algum número. Estes membros são armazenados em \textit{arrays}.
+A seguir, a descrição de um membro, em inglês, retirada da própria documentação do GMP:
+\begin{verbatim}
+A limb means the part of a multi-precision number that fits in a single machine 
+word. (We chose this word because a limb of the human body is analogous to a 
+digit, only larger, and containing several digits.) Normally a limb is 32 or 64 
+bits. The C data type for a limb is mp_limb_t.
+\end{verbatim}
+Já para fazer a representação dos números com ponto-flutuante, o procedimento é mais complexo, não fazendo apenas uso de \textit{limbs}.
+O GMP guarda a precisão da \textit{mantissa}, em \textit{limbs}, e ao realizar os cálculos, o objetivo é produzir o número de precisão p de limbs de resultado. Assim, para uma precisão de 100 limbs, devemos ter 100 limbs de resultado.
+O expoente também é composto de limbs e é produzido de modo similar. O número com ponto-flutuante, finalmente, é representado em uma string usando a \textit{mantissa} M e o \textit{expoente} N em um formato M@N (ou MeN alternativamente, caso a base seja menor ou igual a 10).
+
+\end{document}

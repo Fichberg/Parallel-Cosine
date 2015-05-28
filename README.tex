@@ -1,0 +1,306 @@
+\documentclass[11pt]{article}
+
+%% Escrevendo em português
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+%\usepackage[latin1]{inputenc}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[a4paper,margin={1in}]{geometry}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{courier}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{pifont}
+\usepackage{pgfplots}
+\definecolor{sblue}{rgb}{0, 0, 1}
+\definecolor{blue}{rgb}{0, 0.55, 1}
+\definecolor{red}{rgb}{1, 0, 0}
+\newcommand{\quotes}[1]{``#1''}
+
+%% Pulando linhas
+\renewcommand{\baselinestretch}{1.5}
+
+\newcommand{\vsp}{\vspace{0.2in}}
+
+
+
+
+\begin{document}
+
+
+\centerline{
+  \begin{minipage}[t]{5in}
+    \begin{center}
+    {\Large \bf README - EP2}
+    \vsp \\
+	{\small {\bf Disciplina:} Programação Concorrente - MAC0438 / IME-USP}\\
+	{\small {\bf Professor:} Daniel Macêdo Batista}
+    \end{center}
+  \end{minipage}
+}
+\vsp
+
+
+\section{Integrantes}
+
+\begin{tabular}{ll}
+\textbf {Nome} &  \textbf {NUSP} \\
+Renan Fichberg & 7991131
+\end{tabular}
+
+\vsp
+
+%============================================================
+
+\section{Arquivos}
+
+O diretório \textbf{ep2-renan} deve conter os seguintes arquivos:
+\subsection{Arquivos}
+\begin{itemize}
+\item \textbf{cosine.c} -- Código-fonte do programa.
+\item \textbf{makefile} -- Para compilar o programa.
+\item \textbf{Relatorio.pdf} -- Documento que contém resultados experimentais da análise de desempenho do programa e observações.
+\item \textbf{README.pdf} -- Este documento, que contém uma explicação sobre o funcionamento do programa.
+\end{itemize}
+
+\section{Compilação e execução}
+Para compilar, você pode utilizar o programa \textit{make} sem nenhum parâmetro:
+
+\begin{flushleft}
+\textcolor{blue}{\$make}
+\end{flushleft}
+
+\noindent Para executar o programa gerado na compilação, \textbf{você deve passar obrigatoriamente os primeiros 4 parâmetros}. O último parâmetro (marcado com \textbf{\textcolor{red}{*}}) é opcional. Os parâmetros precisam \textbf{obrigatoriamente serem passados na seguinte ordem}: 
+
+\begin{flushleft}
+\textcolor{blue}{\$./cosine q [f $|$ m] p x [d $|$ s]}\textbf{\textcolor{red}{*}}
+
+onde, 
+\end{flushleft}
+\begin{itemize}
+\item \textbf{q} -- Número de \textit{threads}. Se q = 0, o programa irá usar o número de núcleos da máquina. Se q = 1, o programa irá rodar no modo sequencial.
+\item \textbf{[f $|$ m]} -- Modo de operação. Há 2 possíveis modos:
+	\begin{enumerate}
+	\item Modo \textbf{f} -- A condição de parada da computação do cosseno é satisfeita quando o módulo da diferença de duas computações do cosseno de rodadas consecutivas for menor que a precisão, passada pelo usuário no terceiro argumento \textbf{\textcolor{blue}{p}}.
+	\item Modo \textbf{m} -- A condição de parada da computação do cosseno é satisfeita quando o módulo de um termo computado por uma \textit{thread} for menor que a precisão, passada pelo usuário no terceiro argumento \textbf{\textcolor{blue}{p}}.
+	\end{enumerate}
+\item \textbf{p} -- A precisão do cálculo a ser realizado. É utilizada na condição de parada do programa e para a alocação de números no tamanho necessário pela biblioceta \textbf{GMP}.
+\item \textbf{x} -- O valor de \textit{x}, em radianos. Este argumento \textbf{deve ser um número}. Entradas como 1/3 ou 2pi estão \textbf{erradas}.
+\item \textbf{[d $|$ s]} -- Parâmetro opcional. Se não for passado, será rodada a versão paralela (se \textbf{\textcolor{blue}{q}} != 1) normal, que imprime apenas no final da execução o valor encontrado para \textit{cos(x)} e o número de rodadas. Os 2 comportamentos possíveis são:
+	\begin{enumerate}
+	\item Comportamento \textbf{d} -- Além das impressões normais, o programa irá imprimir o valor de \textit{cos(x)} a cada rodada e a ordem com que as \textbf{\textcolor{blue}{q}} \textit{threads} atingiram a barreira.
+	\item Comportamento \textbf{s} -- O programa não irá rodar em modo paralelo, mas sim em modo sequencial (com a \textit{thread} da própria função main). A cada computação de um novo termo, o valor de \textit{cos(x)} será imprimido na tela. Ao terminar a execução, serão impressos também o valor final de \textit{cos(x)} e o número de termos calculados.
+	\end{enumerate}
+\end{itemize}
+
+
+\section{Sobre o programa}
+
+O programa foi escrito em linguagem C e faz a gerência de \textit{threads} utilizando \textit{POSIX threads}. Dentre as bibliotecas usadas, estão \textit{pthread.h} (\textit{threads} e \textit{locks}), \textit{unistd.h} (buscar a quantidade de núcleos) e \textit{gmp.h} (para usar números de alta precisão e fazer operações aritméticas com estes).
+
+\subsection{Barreira de Sincronização}
+
+Foi implementada uma barreira para garantir a sincronização das \textit{threads} e assim poder fazer a contagem das rodadas, bem como o exato momento de imprimir o valor parcial do \textit{cos(x)} caso seja solicitado que o programa rode com o parâmetro opcional \textbf{\textcolor{blue}{d}}. O algoritmo da barreira que foi implementada é mostrado logo abaixo. Considere que o algoritmo recebe um vetor \texttt{v} com as i = n + 1 \textit{threads}, $0 \leq i \leq n$.
+
+\begin{flushleft}
+\textbf{int} v[0...n].done = 0;
+\end{flushleft}
+
+\begin{algorithm}[H]
+\caption{Barrier (Pure) Coordinator Thread (i = 0)}
+\begin{algorithmic}[1]
+\State v[0].done = 1
+\While {v[n].done $\neq$ 1}
+\State continue
+\EndWhile
+\State \textit{\# torna a barreira reutilizável}
+\State v[0].done = 0
+\While {v[n].done $\neq$ 0}
+\State continue
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Barrier (Pure) Term Threads (i = 1 to n)}
+\begin{algorithmic}[1]
+\While {v[i - 1].done $\neq$ 1}
+\State continue
+\EndWhile
+\State v[i].done = 1
+\While {v[n].done $\neq$ 1}
+\State continue
+\EndWhile
+\State \textit{\# torna a barreira reutilizável}
+\While {v[i - 1].done $\neq$ 0}
+\State continue
+\EndWhile
+\State v[i].done = 0
+\While {v[n].done $\neq$ 0}
+\State continue
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+\begin{flushleft}
+Esta barreira foi retirada de exercícios de sala de aula. \\
+\end{flushleft}
+A seguir, o algoritmo desta mesma barreira implementado no programa, mostrado superficialmente (o objetivo é só mostrar a idéia), adaptado para atender às exigências do enunciado.
+
+\begin{flushleft}
+\textbf{int} v[0...n].done = 0, v[0].lock = 0;
+\end{flushleft}
+
+\begin{algorithm}[H]
+\caption{Barrier Coordinator Thread (i = 0)}
+\begin{algorithmic}[1]
+\State do task1
+\State v[0].done = 1
+\While {v[n].done $\neq$ 1}
+\State continue
+\EndWhile
+\State do task2
+\State v[0].lock = 1
+\State do task1
+\State v[0].done = 0
+\While {v[n].done $\neq$ 0}
+\State continue
+\EndWhile
+\State do task2
+\State v[0].lock = 0
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Barrier Term Threads (i = 1 to n)}
+\begin{algorithmic}[1]
+\State calculate term
+\While {v[i - 1].done $\neq$ 1}
+\State continue
+\EndWhile
+\State add calculated term to \textit{cos(x)}
+\State v[i].done = 1
+\While {v[n].done $\neq$ 1}
+\State continue
+\EndWhile
+\While {v[0].lock $\neq$ 1}
+\State continue
+\EndWhile
+\State calculate term
+\While {v[i - 1].done $\neq$ 0}
+\State continue
+\EndWhile
+\State add calculated term to \textit{cos(x)}
+\State v[i].done = 0
+\While {v[n].done $\neq$ 0}
+\State continue
+\EndWhile
+\While {v[0].lock $\neq$ 0}
+\State continue
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+Para não perder eficiência, a cada vez que as \textit{threads} se encontram na barreira, elas calculam o \textit{cos(x)} \textbf{duas vezes}, uma na \quotes{ida} e outra na \quotes{volta}. Note que para fazer isso, foi necessário adicionar uma nova variável para controle de sincronização (nos algoritmos acima representada como \textit{v[i].lock}). Assim, quando a barreira está em processo de se tornar reutilizável, ela age como se as threads estivessem se encontrando mais uma vez na barreira. \\
+\textbf{Obs:} para evitar \textit{deadlocks}, todos os \textit{whiles} dos algoritmos 3 e 4 têm uma condição de saída internamente, que consiste em checar uma variável global que alerta quando o programa encerrou (isto é, foi encontrado um valor que em módulo é menor que a precisão \textbf{\textcolor{blue}{p}}, passada pelo usuário através da linha de comando).
+
+
+\subsection{Computação Paralela}
+
+O programa, como já mencionado, tem um modo de computação paralela. Tal paralelismo foi implementado de modo a \textbf{tentar alocar a menor quantidade de memória possível} ao mesmo tempo que, quanto maior a precisão que o usuário solicitar, mais eficiente, em velocidade, será feito o cálculo do cosseno de \textit{x} em relação ao modo sequencial. Pela própria estrutura da barreira e a lógica da computação dos cálculos, quando a precisão é baixa, é importante ressaltar que o modo sequencial é mais veloz que o paralelo. Isso pois a barreira perde um tempo razoável em relação ao modo sequencial sincronizando as \textit{threads}. Ainda, houve a necessidade de utilizar travas (\textit{= locks}) para garantir a exclusão mútua do cálculo dos fatoriais e das potências envolvidas, isto pois as \textit{threads} utilizam vetores compartilhados (de tamanho 2) para realizar cálculo.
+
+\subsection{Funcionamento dos cálculos dos fatoriais e das potências}
+
+Conforme dito na seção anterior, há vetores de tamanho 2 compartilhados pelas \textit{i threads}, $1 \leq i \leq n$, chamados de \textit{power\_array} e \textit{factorial\_array} (para os cálculos da potência e do fatorial, respectivamente). Chamamos de par as casas de índice 0 (\textit{= EVEN}) que terão potências e fatoriais de números \textit{n} \textbf{pares}, isto é, todo número da forma $n = 2 * i$, $0 \leq i < \infty$. Assim, considerando estas informações, serão armazenados nos índices 0 dos vetores \textit{power\_array} e \textit{factorial\_array} os números $n!$ e $x^n$, respectivamente, e estes serão reescritos sempre que um novo \textit{n} par for calculado. Por outro lado, chamamos de ímpar as casas de índice 1 (\textit{= ODD}) que terão as potências e os fatoriais de números impares, isto é, todo número $n = (2 * i) + 1$, $0 \leq i < \infty$. Os números ímpares funcionam da mesma forma que os pares.
+Ambos os vetores começam com as suas duas casas iniciadas com o valor 1. Conforme a computação do cosseno vai acontecendo, o valor de \textit{i} do \textit{índice do somatório} vai aumentando e os novos valores de potência e de fatorial podem ser obtidos considerando o último valor par calculado (obs: note que a série dos cossenos utiliza apenas potências e limites superiores de produtórios (função fatorial) pares), assim, se a minha configuração do vetor potência em determinado momento do programa é
+
+\begin{center}
+[$ x^n $, $ x^{n+1} $]
+\end{center}
+Para o próximo termo, precisaremos obter o valor de $ x^{n+2} $, que é facilmente obtido fazendo o produto da segunda casa do vetor por $x$. O raciocínio do fatorial é análogo, só que ao invés de usar a variável global \textit{x}, é utilizada a variável global \textit{n} (não confundir com o \textit{n} da explicação anterior. Este \textit{n} é uma variável do programa), que representa o índice do somatório. Toda \textit{thread} sempre calcula o valor dos índices 0 e 1 (o 1 é para deixar preparado para a próxima thread), e justamente por todas as threads estarem acessando variáveis globais como o \textit{n} e os vetores \textit{power\_array} e \textit{factorial\_array} é que o programa utiliza 3 travas para garantir a exclusão mútua.
+
+\section{Guia de implementação}
+
+Nesta seção, iremos brevemente nomear os métodos, as variáveis globais e as estruturas do programa e comentar suas funçoes
+
+\subsection{Estruturas}
+A única estrutura do programa é a que representa um termo.
+
+\begin{itemize}
+	\item \textbf{\textcolor{sblue}{struct term} / \textcolor{sblue}{Term}} -- Estrutura que representa um termo da série dos cossenos. Armazena, para cada termo:
+	\begin{itemize}
+	\item \textbf{\textcolor{sblue}{int} number} -- Identificador da \textit{thread}.
+	\item \textbf{\textcolor{sblue}{mpf\_t} result} -- Guarda o resultado calculado do termo, em módulo.
+	\item \textbf{\textcolor{sblue}{int} computed} -- Usado pela barreira para sincronização das \textit{threads}.
+	\item \textbf{\textcolor{sblue}{struct term} *all\_terms} -- Vetor que contém todas as \textit{threads} de termo da execução.
+	\item \textbf{\textcolor{sblue}{int} size} -- O tamanho do vetor \textit{all\_terms}.
+	\item \textbf{\textcolor{sblue}{int} print} -- Usado para saber se o parâmetro opcional \textbf{\textcolor{blue}{d}} foi passado.
+	\item \textbf{\textcolor{sblue}{unsigned int} turn} -- Usado para uma \textit{thread} saber quando é a sua vez de calcular o fatorial e a potência. A última \textit{thread} da rodada irá reiniciar as variáveis de controle para a próxima rodada.
+	\item \textbf{\textcolor{sblue}{unsigned int} n} -- Usado para guardar o termo a ser calculado. O \textit{n} representa o índice do somatório da série, começando com valor 0 e sendo incrementado até a computação ser satisfeita. Ao atribuir o valor da global \textit{n} para este campo, a global é incrementada para a \textit{thread} responsável pelo cálculo do próximo termo obter o valor correto.
+	\item \textbf{\textcolor{sblue}{int} sgn} -- Funciona similar ao campo \textit{n}, mas é usada para saber se o termo é positivo ou negativo e ajustar a global homônima responsável pelo sinal para a computação do próximo termo. Fica oscilando entra -1 e 1.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Globais}
+As globais utilizadas no programa são as apresentadas a seguir:
+\begin{itemize}
+	\item \textbf{\textcolor{sblue}{char} stop\_condition} -- Guarda o segundo parâmetro.
+	\item \textbf{\textcolor{sblue}{mpf\_t} *precision} -- Guarda o segundo parâmetro, convertido em número com um tipo de alta precisão.
+	\item \textbf{\textcolor{sblue}{unsigned int} counter} -- Contador de rodadas.
+	\item \textbf{\textcolor{sblue}{unsigned int} n} -- Contador de termos. É o índice do somatório na série dos cossenos.
+	\item \textbf{\textcolor{sblue}{int} sgn} -- Guarda o sinal do termo, para saber se o valor calculado será somado ou subtraído ao valor de \textit{cos(x)}.
+	\item \textbf{\textcolor{sblue}{mpf\_t} *x} -- Guarda o quarto parâmetro, convertido em número com um tipo de alta precisão.
+	\item \textbf{\textcolor{sblue}{mpf\_t} *cosx} -- Guarda o valor de \textit{cos(x)}. É imprimido no final da execução.
+	\item \textbf{\textcolor{sblue}{mpz\_t} *factorial\_array} -- Usado para calcular os fatoriais.
+	\item \textbf{\textcolor{sblue}{mpf\_t} *power\_array} -- Usado para calcular as potências.
+	\item \textbf{\textcolor{sblue}{unsigned int} order} -- Usado para determinar a ordem que as \textit{threads} devem ser calculadas na barreira.
+	\item \textbf{\textcolor{sblue}{unsigned int} enter\_factorial} -- Concede permissão para a \textit{thread} que estiver na colocação certa calcule o fatorial do seu termo.
+	\item \textbf{\textcolor{sblue}{unsigned int} enter\_power} -- Concede permissão para a \textit{thread} que estiver na colocação certa calcule a potência do seu termo.
+	\item \textbf{\textcolor{sblue}{unsigned int} finish} -- Para o programa saber quando parar a execução.
+\end{itemize}
+
+\subsection{Travas}
+A seguir, as travas utilizadas no programa:
+\begin{itemize}
+	\item \textbf{\textcolor{sblue}{pthread\_mutex\_t} vlock} -- Protege escrita e leitura de algumas variáveis globais (as que são compartilhadas pelas \textit{threads} que precisam de exclusão mútua).
+	\item \textbf{\textcolor{sblue}{pthread\_mutex\_t} plock} -- Protege a escrita no vetor \textit{power\_array}.
+	\item \textbf{\textcolor{sblue}{pthread\_mutex\_t} flock} -- Protege a escrita no vetor \textit{factorial\_array}.
+\end{itemize}
+
+\subsection{Métodos}
+Nesta seção, um breve apresentação das assinaturas dos métodos (sem os parâmetros) e para que servem.
+\begin{itemize}
+	\item \textbf{\textcolor{sblue}{void} args\_qt} -- Checagem da quantidade de argumentos passados pela linha de comando.
+	\item \textbf{\textcolor{sblue}{void} integer\_argument} -- Checagem dos argumentos que devem ser inteiros para garantir que não irá quebrar na chamada dos sucessivos \textit{atoi}.
+	\item \textbf{\textcolor{sblue}{int} do\_first\_argument} -- Obtem o primeiro parâmetro.
+	\item \textbf{\textcolor{sblue}{int} do\_second\_argument} -- Obtem o segundo parâmetro.
+	\item \textbf{\textcolor{sblue}{int} do\_third\_argument} -- Obtem o terceiro parâmetro.
+	\item \textbf{\textcolor{sblue}{char} *do\_fifth\_argument} - Ontem o quinto parâmetro.
+	\item \textbf{\textcolor{sblue}{void} initiate\_terms} -- Inicia os campos dos termos.
+	\item \textbf{\textcolor{sblue}{void} free\_terms} -- Desaloca toda memória alocada dinamicamente na inicialização dos campos dos termos.
+	\item \textbf{\textcolor{sblue}{void} create\_threads} -- Cria as \textit{threads}.
+	\item \textbf{\textcolor{sblue}{void} join\_threads} -- Faz a chamada para dar \textit{join} em todas as \textit{threads} internamente.
+	\item \textbf{\textcolor{sblue}{void} get\_x} -- Pega o valor obtido de \textit{x} e o transforma em um número que usa um tipo de alta precisão.
+	\item \textbf{\textcolor{sblue}{void} get\_precision} -- Pega o valor obtido da precisão e o transforma em um número que usa um tipo de alta precisão.
+	\item \textbf{\textcolor{sblue}{void} initiate\_cosx} -- Inicia o \textit{cos(x)} com um tipo de alta precisão.
+	\item \textbf{\textcolor{sblue}{void} initiate\_arrays} -- Inicia os vetores que serão usados nos cálculos de potências e fatoriais.
+	\item \textbf{\textcolor{sblue}{void} free\_arrays} -- Desaloca os vetores que foram usados nos cálculos de potências e fatoriais.
+	\item \textbf{\textcolor{sblue}{void} initiate\_locks} -- Inicia as travas do programa.
+	\item \textbf{\textcolor{sblue}{void} destroy\_locks} -- Encerra as travas do programa.
+	\item \textbf{\textcolor{sblue}{void} sequential\_compute} -- Calcula \textit{cos(x)} em modo sequencial, caso o programa seja solicitado a rodar no modo \textbf{\textcolor{blue}{s}} ou o valor do primeiro parâmetro seja 1.
+	\item \textbf{\textcolor{sblue}{void} *term\_compute} -- Calcula \textit{cos(x)} em modo paralelo, caso o programa não seja solicitado a rodar no modo \textbf{\textcolor{blue}{s}} e o valor do primeiro parâmetro não seja 1.
+	\item \textbf{\textcolor{sblue}{void} barrier} -- A função da barreira para garantir a sincronização das \textit{threads}. As computações do cosseno em modo paralelo acontecem dentro deste método.
+	\item \textbf{\textcolor{sblue}{void} do\_factorial2n} -- Chama internamente o método que calcula o fatorial do termo.
+	\item \textbf{\textcolor{sblue}{mpz\_t} *mpz\_fact2n} -- Função que calcula os fatoriais e retorna o fatorial desejado.
+	\item \textbf{\textcolor{sblue}{void} do\_power2n} -- Chama internamente o método que calcula a potência do termo.
+	\item \textbf{\textcolor{sblue}{mpf\_t} *mpf\_pow2n} -- Função que calcula as potências e retorna a potência desejada.
+	\item \textbf{\textcolor{sblue}{void} do\_sign} -- De acordo com o sinal do termo, soma ou subtrai de \textit{cos(x)}.
+	\item \textbf{\textcolor{sblue}{void} do\_absolute} -- Usada para fazer o módulo da diferença de dois cossenos calculados em rodadas consecutivas de um número com tipo de alta precisão internamente.
+	\item \textbf{\textcolor{sblue}{void} assign\_and\_update} -- Atribui o valor das globais que precisam às \textit{threads} e reescreve seus valores (das globais) de forma segura para a próxima \textit{thread} usar.
+	\item \textbf{\textcolor{sblue}{void} reset\_computation\_control\_globals} -- O último termo a ser computado da rodada reinicia algumas das variáveis globais.
+	\item \textbf{\textcolor{sblue}{void} print\_thread\_id} -- Internamente, chama um \textit{printf} caso o programa esteja rodando com o parâmetro opcional \textbf{\textcolor{blue}{d}} para imprimir o identificador da \textit{thread}.
+	\item \textbf{\textcolor{sblue}{void} print\_cosx} -- Imprime o valor de \textit{cos(x)} sempre que invocada. 
+\end{itemize}
+
+\end{document}
